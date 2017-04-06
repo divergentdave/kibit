@@ -61,7 +61,10 @@ into the namespace."
   (let [do-read (fn do-read [ns]
                   (lazy-seq
                     (let [form (binding [*ns* ns]
-                                 (read r false eof))
+                                 (read {:read-cond :allow
+                                        :features #{:clj}
+                                        :eof eof}
+                                       r))
                           [ns? new-ns k] (when (sequential? form) form)
                           ns (if (and (symbol? new-ns)
                                       (or (= ns? 'ns) (= ns? 'in-ns)))
